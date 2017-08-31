@@ -1,0 +1,24 @@
+[
+  {
+    "type": "heading",
+    "defaultValue": "Pluie dans l'heure"
+  },
+  {
+    "type": "text",
+    "defaultValue": "Vous pouvez saisir les codes insee des villes à surveiller. La ville la plus proche de la position actuelle peut aussi etre aussi ajoutée."
+  },
+  {
+    "type": "input",
+    "messageKey": "CITY_CODES",
+    "label": "Liste des codes insee des villes à traiter"
+  },
+  {
+    "type": "toggle",
+    "messageKey": "CITY_CURRENT_DISPLAY",
+    "label": "Cherche les infos pour la ville actuelle"
+  },
+  {
+    "type": "submit",
+    "defaultValue": "Save"
+  }
+]
