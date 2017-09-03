@@ -25,16 +25,23 @@ function setupListeners(stack, cardHolder) {
 }
 
 CardStack.prototype.show = function (cardIndex) {
-  if (this.currentCard) {
-    if (this.currentCard.hide) {
-      this.currentCard.hide();
-    } else if (this.currentCard.card.hide) {
-      this.currentCard.card.hide();
+  console.log('showing ' + cardIndex)
+  var newCurrentCard = this.cards[cardIndex];
+  if (newCurrentCard) {
+    newCurrentCard.show();
+    if (this.currentCard) {
+      console.log('hiding ' + this.currentCard.cardIndex)
+      if (this.currentCard.hide) {
+        console.log('hiding the card')
+        this.currentCard.hide();
+      } else if (this.currentCard.card.hide) {
+        console.log('hiding the card.card')
+        this.currentCard.card.hide();
+      }
     }
+    this.currentCard = newCurrentCard;
   }
-  this.cards[cardIndex].show();
-  this.currentCard = this.cards[cardIndex];
-}
+};
 
 CardStack.prototype.register = function (metaCard, doShow) {
   const self = this;
@@ -46,11 +53,11 @@ CardStack.prototype.register = function (metaCard, doShow) {
   }
 
   const id = metaCard.getId();
-  const matchingCard = self.cards.filter(function(existingCard){
+  const matchingCard = self.cards.filter(function (existingCard) {
     return id === existingCard.getId();
   });
-  if (matchingCard.length>0) {
-    console.log('the card ' + id+' is already defined');
+  if (matchingCard.length > 0) {
+    console.log('the card ' + id + ' is already defined');
     return;
   }
 
@@ -60,11 +67,15 @@ CardStack.prototype.register = function (metaCard, doShow) {
   setupListeners(self, metaCard);
 
   if (doShow) {
-    metaCard.refresh(function(){
+    metaCard.refresh(function () {
       self.show(metaCard.cardIndex);
     });
   } else {
-    metaCard.refresh();
+    metaCard.refresh(function () {
+      if (!self.currentCard) {
+        self.show(metaCard.cardIndex);
+      }
+    });
   }
 };
 

@@ -30,6 +30,7 @@
     ],
     "resources": {
       "media": [
+
         {
           "file": "images/tile_splash.png",
           "name": "IMAGE_TILE_SPLASH",

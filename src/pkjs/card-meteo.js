@@ -10,12 +10,6 @@ function CardMeteo(city) {
   }
   this.city = city;
 
-  // this.card = new UI.Card({
-  //   title: city.name,
-  //   subtitleColor: 'indigo', // Named colors
-  //   bodyColor: '#9a0036'// Hex colors
-  // });
-
   this.card = buildCardMeteoWindow();
   this.card.refreshWindow(city);
 };
@@ -30,9 +24,6 @@ CardMeteo.prototype.refresh = function refresh(onSuccess, onError) {
 
   getRain(self.city.inseeCode,
     function (rain) {
-      //
-      // self.card.subtitle(rain.lastUpdate);
-      // self.card.body(JSON.stringify(rain.niveauPluieText));
 
       self.card.refreshWindow(self.city, rain);
 

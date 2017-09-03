@@ -1,0 +1,74 @@
+{
+  "idLieu": "940030",
+  "echeance": "201709011715",
+  "lastUpdate": "17h05",
+  "isAvailable": true,
+  "hasData": true,
+  "niveauPluieText": [
+    "De17h15 à 17h20 : Pas de précipitations",
+    "De17h20 à 17h55 : Précipitations fortes",
+    "De17h55 à 18h15 : Pas de précipitations"
+  ],
+  "dataCadran": [
+    {
+      "niveauPluieText": "Pas de précipitations",
+      "niveauPluie": 1,
+      "color": "ffffff"
+    },
+    {
+      "niveauPluieText": "Précipitations fortes",
+      "niveauPluie": 4,
+      "color": "006ab3"
+    },
+    {
+      "niveauPluieText": "Précipitations fortes",
+      "niveauPluie": 4,
+      "color": "006ab3"
+    },
+    {
+      "niveauPluieText": "Précipitations fortes",
+      "niveauPluie": 4,
+      "color": "006ab3"
+    },
+    {
+      "niveauPluieText": "Précipitations fortes",
+      "niveauPluie": 4,
+      "color": "006ab3"
+    },
+    {
+      "niveauPluieText": "Précipitations fortes",
+      "niveauPluie": 4,
+      "color": "006ab3"
+    },
+    {
+      "niveauPluieText": "Précipitations fortes",
+      "niveauPluie": 4,
+      "color": "006ab3"
+    },
+    {
+      "niveauPluieText": "Précipitations fortes",
+      "niveauPluie": 4,
+      "color": "006ab3"
+    },
+    {
+      "niveauPluieText": "Pas de précipitations",
+      "niveauPluie": 1,
+      "color": "ffffff"
+    },
+    {
+      "niveauPluieText": "Pas de précipitations",
+      "niveauPluie": 1,
+      "color": "ffffff"
+    },
+    {
+      "niveauPluieText": "Pas de précipitations",
+      "niveauPluie": 1,
+      "color": "ffffff"
+    },
+    {
+      "niveauPluieText": "Pas de précipitations",
+      "niveauPluie": 1,
+      "color": "ffffff"
+    }
+  ]
+}

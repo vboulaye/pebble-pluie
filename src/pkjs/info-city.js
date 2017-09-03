@@ -6,13 +6,13 @@ try {
   ajax = _ajax;
 }
 
-function getCurrentCity(onSuccess, onError) {
+function getCityInfo(city, onSuccess, onError) {
 
 // Request current position
   navigator.geolocation.getCurrentPosition(function (pos) {
     console.log('lat= ' + pos.coords.latitude + ' lon= ' + pos.coords.longitude);
     ajax({
-        url: 'https://api-adresse.data.gouv.fr/reverse/?lat='+pos.coords.latitude+'&lon='+pos.coords.longitude,
+        url: 'https://api-adresse.data.gouv.fr/search/?type=municipality&q='+city,
         type: 'json',
       },
       function (data) {
@@ -33,11 +33,11 @@ function getCurrentCity(onSuccess, onError) {
 
       }, onError);
   }, onError, {
-    enableHighAccuracy: false,
+    enableHighAccuracy: true,
     maximumAge: 10000,
     timeout: 10000
   });
 
 }
 
-module.exports = getCurrentCity;
+module.exports = getCityInfo;
