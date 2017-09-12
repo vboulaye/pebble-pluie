@@ -8,35 +8,36 @@ try {
 
 function getCityInfo(city, onSuccess, onError) {
 
-// Request current position
-  navigator.geolocation.getCurrentPosition(function (pos) {
-    console.log('lat= ' + pos.coords.latitude + ' lon= ' + pos.coords.longitude);
-    ajax({
-        url: 'https://api-adresse.data.gouv.fr/search/?type=municipality&q='+city,
-        type: 'json',
-      },
-      function (data) {
-        if (data.features
-          && data.features[0]
-          && data.features[0].properties) {
-          const cityProperties = data.features[0].properties;
-          const city = {
-            name : cityProperties.city,
-            context : cityProperties.context,
-            inseeCode : cityProperties.citycode,
-            postCode : cityProperties.postcode,
-          };
-          onSuccess(city);
-        } else {
-          onError("no data found for geoloc "+ JSON.stringify(pos.coords));s
-        }
+  console.log('city= ' + city);
+  ajax({
+      url: 'https://api-adresse.data.gouv.fr/search/?type=municipality&q=' + city,
+      type: 'json',
+    },
+    function (data) {
+      if (data.features
+        && data.features[0]
+        && data.features[0].properties) {
+        const cityProperties = data.features[0].properties;
 
-      }, onError);
-  }, onError, {
-    enableHighAccuracy: true,
-    maximumAge: 10000,
-    timeout: 10000
-  });
+        const city = {
+          name: cityProperties.city,
+          context: cityProperties.context,
+          inseeCode: cityProperties.citycode,
+          postCode: cityProperties.postcode,
+        };
+        if (data.features[0].geometry && data.features[0].geometry.coordinates) {
+          city.coords = {
+            latitude: data.features[0].geometry.coordinates[1],
+            longitude: data.features[0].geometry.coordinates[0],
+          }
+        }
+        onSuccess(city);
+      } else {
+        onError("no data found for query " + city);
+      }
+
+    }, onError);
+
 
 }
 

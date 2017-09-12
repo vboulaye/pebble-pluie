@@ -87,7 +87,7 @@ function refreshWindow(city, rain) {
 
   var wind = this;
 
-  // console.log('refreshing ' + city.name + ' with ' + rain);
+  //console.log('refreshing ' + city.name + ' with ' + JSON.stringify(rain));
   wind.cityText.text(city.name);
 
   if (rain) {
@@ -95,6 +95,7 @@ function refreshWindow(city, rain) {
   } else {
     wind.lastUpdateText.text('--:--');
   }
+  console.log('refreshing ' + city.name +'  '+ wind.lastUpdateText.text());
 
   // console.log("sections" , wind.sections);
   if (rain && rain.dataCadran) {

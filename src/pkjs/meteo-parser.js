@@ -13,11 +13,15 @@ function getRain(cityInseeCode, onSuccess, onError) {
     type: 'json',
 
   }, function (data) {
-    console.log("pluie dans l heure " + JSON.stringify(data));
+    //console.log("pluie dans l heure " + JSON.stringify(data));
     if (!data.lastUpdate) {
       data.lastUpdate = 'non couvert';
     } else {
       data.lastUpdate = data.lastUpdate.replace('h', ':');
+      // echeance gives the start time of the forecast
+      if (data.echeance) {
+        data.lastUpdate = data.echeance.substr(8, 2) + ':' + data.echeance.substr(10, 2);
+      }
     }
     onSuccess(data);
   }, onError);

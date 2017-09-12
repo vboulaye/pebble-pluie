@@ -1,53 +1,54 @@
-function CardStack(splashScreen) {
-  this.cards = [];
-  splashScreen.show();
-  this.currentCard = splashScreen;
-}
+const UI = require('pebblejs/ui');
 
+const buildCardMeteoWindow = require('./card-meteo-window-builder.js');
 
 function mod(a, n) {
   return ((a % n) + n) % n;
 }
 
-function setupListeners(stack, cardHolder) {
-  var card = cardHolder.card;
+function setupListeners(stack) {
+  const self = stack;
+  var card = self.card;
   card.on('click', 'up', function (e) {
-    var cardIndex = mod(cardHolder.cardIndex - 1, stack.cards.length);
-    stack.show(cardIndex);
+    var cardIndex = mod(stack.cardIndex - 1, self.cards.length);
+    self.show(cardIndex);
   });
   card.on('click', 'down', function (e) {
-    var cardIndex = mod(cardHolder.cardIndex + 1, stack.cards.length);
-    stack.show(cardIndex);
+    var cardIndex = mod(stack.cardIndex + 1, self.cards.length);
+    self.show(cardIndex);
   });
   card.on('click', 'select', function (e) {
-    cardHolder.refresh();
+    var cardIndex = self.cardIndex;
+    const infoMeteo = self.cards[cardIndex];
+    infoMeteo.rain.lastUpdate = '--:--';
+    self.card.refreshWindow(infoMeteo.city, infoMeteo.rain);
+    infoMeteo.refresh(function (rain) {
+      self.show(cardIndex);
+    }, function (err) {
+    });
   });
+  self.cardIndex = 0;
 }
 
+
+function CardStack() {
+  this.cards = [];
+  this.card = buildCardMeteoWindow();
+
+  this.card.show();
+}
+
+
 CardStack.prototype.show = function (cardIndex) {
-  console.log('showing ' + cardIndex)
-  var newCurrentCard = this.cards[cardIndex];
-  if (newCurrentCard) {
-    newCurrentCard.show();
-    if (this.currentCard) {
-      console.log('hiding ' + this.currentCard.cardIndex)
-      if (this.currentCard.hide) {
-        console.log('hiding the card')
-        this.currentCard.hide();
-      } else if (this.currentCard.card.hide) {
-        console.log('hiding the card.card')
-        this.currentCard.card.hide();
-      }
-    }
-    this.currentCard = newCurrentCard;
-  }
+  const self = this;
+  console.log('showing ' + cardIndex);
+  self.cardIndex = cardIndex;
+  const infoMeteo = self.cards[cardIndex];
+  this.card.refreshWindow(infoMeteo.city, infoMeteo.rain);
 };
 
 CardStack.prototype.register = function (metaCard, doShow) {
   const self = this;
-  if (!metaCard.card) {
-    throw new Error("the card to register in the stack must have a ui card instance" + JSON.stringify(metaCard));
-  }
   if (!metaCard.refresh) {
     throw new Error("the card to register in the stack must have a refresh method" + JSON.stringify(metaCard));
   }
@@ -61,22 +62,50 @@ CardStack.prototype.register = function (metaCard, doShow) {
     return;
   }
 
-  metaCard.cardIndex = self.cards.length;
+  const cardIndex = self.cards.length;
+  metaCard.cardIndex = cardIndex;
   self.cards.push(metaCard);
 
-  setupListeners(self, metaCard);
+  metaCard.refresh(function (rain) {
+    if (cardIndex === 0) {
+      self.show(cardIndex);
+      setupListeners(self);
+    }
+  });
 
-  if (doShow) {
-    metaCard.refresh(function () {
-      self.show(metaCard.cardIndex);
-    });
-  } else {
-    metaCard.refresh(function () {
-      if (!self.currentCard) {
-        self.show(metaCard.cardIndex);
-      }
-    });
-  }
+
 };
+
+function deg2rad(deg) {
+  return deg * Math.PI / 180;
+}
+
+CardStack.prototype.showClosest = function (coords) {
+  const self = this;
+  if (coords) {
+    const src = {lat: deg2rad(coords.latitude), lon: deg2rad(coords.longitude)};
+    var closestIndex;
+    var closestDistance = 100000000000;
+    self.cards.forEach(function (card, idx) {
+      if (card.city.coords) {
+        const dest = {lat: deg2rad(card.city.coords.latitude), lon: deg2rad(card.city.coords.longitude)};
+        const dist = 6367445 * Math.acos(Math.sin(src.lat) * Math.sin(dest.lat) + Math.cos(src.lat) * Math.cos(dest.lat) * Math.cos(src.lon - dest.lon))
+        console.log('src ' + JSON.stringify(coords))
+        console.log('dest ' + JSON.stringify(card.city.coords))
+        console.log(card.city.name +' dist ' + dist);
+
+        if (dist < closestDistance) {
+          closestDistance = dist;
+          closestIndex = idx;
+        }
+      }
+
+    });
+    if (closestIndex) {
+      console.log('showing closest city : ' + closestIndex);
+      self.show(closestIndex)
+    }
+  }
+}
 
 module.exports = CardStack;

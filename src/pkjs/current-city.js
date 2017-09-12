@@ -12,7 +12,7 @@ function getCurrentCity(onSuccess, onError) {
   navigator.geolocation.getCurrentPosition(function (pos) {
     console.log('lat= ' + pos.coords.latitude + ' lon= ' + pos.coords.longitude);
     ajax({
-        url: 'https://api-adresse.data.gouv.fr/reverse/?lat='+pos.coords.latitude+'&lon='+pos.coords.longitude,
+        url: 'https://api-adresse.data.gouv.fr/reverse/?lat=' + pos.coords.latitude + '&lon=' + pos.coords.longitude,
         type: 'json',
       },
       function (data) {
@@ -21,14 +21,22 @@ function getCurrentCity(onSuccess, onError) {
           && data.features[0].properties) {
           const cityProperties = data.features[0].properties;
           const city = {
-            name : cityProperties.city,
-            context : cityProperties.context,
-            inseeCode : cityProperties.citycode,
-            postCode : cityProperties.postcode,
+            name: cityProperties.city,
+            context: cityProperties.context,
+            inseeCode: cityProperties.citycode,
+            lat: cityProperties.postcode,
+            lon: cityProperties.postcode,
           };
-          onSuccess(city);
+          if (data.features[0].geometry && data.features[0].geometry.coordinates) {
+            city.coords = {
+              latitude: data.features[0].geometry.coordinates[1],
+              longitude: data.features[0].geometry.coordinates[0],
+            }
+          }
+          onSuccess(city, pos.coords);
         } else {
-          onError("no data found for geoloc "+ JSON.stringify(pos.coords));s
+          onError("no data found for geoloc " + JSON.stringify(pos.coords));
+          s
         }
 
       }, onError);
