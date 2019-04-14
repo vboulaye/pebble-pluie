@@ -1,7 +1,7 @@
 # pebble pluie
 
 
-Appli pebble qui affiche les préciptitations préues dans l'heure d'apres meteo france.
+Appli pebble qui affiche les précipitations prévues dans l'heure d'après météo france.
 
 
 recupère les infos de la ville ou on se trouve par un appel a l api de geolocalisation de pebble.

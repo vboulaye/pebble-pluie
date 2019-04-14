@@ -121,21 +121,23 @@ function buildCardMeteoWindow() {
     },
   });
 
+  const vertPush = Feature.round(12,0);
+
   //const contents = rain ? city.name + '\n' + rain.lastUpdate : city.name;
   wind.cityText = createCityText('');
-  wind.center(wind.cityText, new Vector2(0, 10));
+  wind.center(wind.cityText, new Vector2(0, 10+vertPush));
 
   wind.lastUpdateText = createTimeText('');
-  wind.center(wind.lastUpdateText, new Vector2(0, -35));
+  wind.center(wind.lastUpdateText, new Vector2(0, -35+vertPush));
   // create empty circle
   wind.sections = [];
   for (var i = 0; i < 12; i++) {
     var element = createSection(i, 0);
-    element = wind.center(element);
+    element = wind.center(element, new Vector2(0, +vertPush));
     wind.sections.push(element);
   }
   var radial = createStartBar();
-  wind.center(radial);
+  wind.center(radial, new Vector2(0, +vertPush));
 
   wind.refreshWindow = refreshWindow;
 

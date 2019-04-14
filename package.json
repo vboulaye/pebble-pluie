@@ -30,10 +30,15 @@
     ],
     "resources": {
       "media": [
-
         {
           "file": "images/tile_splash.png",
           "name": "IMAGE_TILE_SPLASH",
+          "type": "bitmap"
+        },
+        {
+          "file": "images/menu_icon.png",
+          "menuIcon": true,
+          "name": "IMAGE_MENU_ICON",
           "type": "bitmap"
         }
       ]
